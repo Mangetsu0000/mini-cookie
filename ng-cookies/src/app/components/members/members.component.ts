@@ -26,6 +26,13 @@ export class MembersComponent implements OnInit {
     
   }
 
+  updateUi(){
+    this.membersService.getMemebers().subscribe((res: any) => {
+      console.log(res.data);
+      this.members = res.data;
+    })
+  }
+
   getMembers() {
     this.membersService.getMemebers().subscribe(res => {
       console.log(res);
@@ -35,19 +42,19 @@ export class MembersComponent implements OnInit {
   createMember() {
     this.membersService.createMember(this.form.value).subscribe(res => {
       console.log(res);
-      this.getMembers();
+      this.updateUi();
     })
   }
   deleteMember(id: number) {
     this.membersService.deleteMember(id).subscribe(res => {
       console.log(res);
-      this.getMembers();
+      this.updateUi();
     })
   }
   editMember(memberId: number, member: any) {
     this.membersService.editMember(memberId, member).subscribe(res => {
       console.log(res);
-      this.getMembers();
+      this.updateUi();
     })
   }
   submit(){

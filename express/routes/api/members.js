@@ -3,7 +3,8 @@ const uuid = require('uuid');
 const router = express.Router();
 let members = require('../../Members');
 //Get all members
-router.get('/', (req, res)=>res.json({data:members}));
+router.get('/', (req, res)=>{
+    res.json({data:members})});
 
 //Get a single member
 router.get('/:id', (req, res)=>{
@@ -17,7 +18,7 @@ router.get('/:id', (req, res)=>{
 //Create a member
 router.post('/', (req, res)=>{
     const newMember = {
-        id : uuid.v4(),
+        id : members.length + 1,
         name: req.body.name,
         email: req.body.email,
         status: 'active'
@@ -26,7 +27,7 @@ router.post('/', (req, res)=>{
     if(!newMember.name || !newMember.email){
      res.status(400).json({msg: 'Name & Email are required '})
     }
-    members = {...members, newMember};
+    members.push(newMember)
     res.json(members)
     // res.redirect('/');
 })
@@ -57,10 +58,11 @@ router.put('/:id', (req, res)=>{
 router.delete('/:id', (req, res)=>{
 
     const found = members.some(_member => _member.id === parseInt(req.params.id))
-
+    // remove the member from the array
+    // members = members.filter(_member => _member.id !== parseInt(req.params.id)) 
     if (found) {
-        res.json({msg: `Member with id ${req.params.id} deleted`, members: members.filter(_member =>
-            _member.id !== parseInt(req.params.id)) }) 
+        res.json({msg: `Member with id ${req.params.id} deleted`, members: members = members.filter(_member => _member.id !== parseInt(req.params.id))})
+            console.log(members)
     }else{
         res.status(400).json({msg: `No member with id: ${req.params.id} was found`})
     }
